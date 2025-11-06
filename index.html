@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>devcotel | Student Application</title>
+  <link rel="stylesheet" href="index.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+
+    /* Basic Reset & Font Import */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: #3b82f6;      /* Corporate Blue */
+  --primary-darker: #1d4ed8;     /* Darker Blue */
+  --primary-hover: #2563eb;      /* Medium Blue for hover */
+  --sidebar-bg: rgba(0, 0, 0, 0.497);
+  --form-bg: rgba(189, 183, 183, 0.607);
+  --text-color: #000000;
+  --label-color: #4b5563;
+  --border-color: rgba(209, 213, 219, 0.7);
+  --input-bg: rgba(255, 255, 255, 0.7);
+  --success-color: #87f59f;
+  --error-color: #ef4444;
+  --translucent-border-color: rgba(255, 255, 255, 0.2);
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-image: url("https://img.freepik.com/free-vector/blur-pink-blue-abstract-gradient-background-vector_53876-174836.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: var(--text-color);
+  font-size: clamp(15px, 1.5vw, 16px);
+  line-height: 1.6;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+/* Main Layout */
+.page-container {
+  display: flex;
+  width: 100%;
+  max-width: 1200px;
+  min-height: 90vh;
+  margin: 5vh auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--translucent-border-color);
+}
+
+/* Sidebar Styling */
+.sidebar {
+  width: 40%;
+  background-color: var(--sidebar-bg);
+  color: #f7fafc;
+  padding: 60px 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.sidebar-content h1 {
+  font-size: clamp(2rem, 5vw, 2.625rem); /* 42px */
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+
+.sidebar-content p {
+  font-size: 17px;
+  opacity: 0.8;
+  line-height: 1.7;
+}
+
+/* Form Panel Styling */
+.form-panel {
+  width: 60%;
+  padding: 50px 60px;
+  overflow-y: auto;
+  background-color: var(--form-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+#success-message {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+}
+#success-message h3 {
+  color: var(--text-color);
+  font-size: clamp(1.25rem, 4vw, 1.625rem); /* 26px */
+  margin-bottom: 12px;
+}
+#success-message p {
+  color: var(--label-color);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+
+/* Form Element Styling */
+.form-group, .fieldset {
+  margin-bottom: 28px;
+}
+
+label, legend {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--label-color);
+}
+
+small {
+  display: block;
+  font-size: 12px;
+  color: var(--label-color);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--input-bg);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  color: var(--text-color);
+}
+
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+input[type="tel"]::placeholder {
+  color: #a0aec0;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="date"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.mt-2 {
+  margin-top: 12px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.form-col {
+  flex: 1;
+}
+
+fieldset {
+  border: none;
+  padding: 0;
+}
+
+legend {
+  padding: 0;
+}
+
+/* Validation Error Styling */
+.error-message {
+  color: var(--error-color);
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 6px;
+  min-height: 1em; /* Prevents layout shifts */
+}
+
+.input-error {
+  border-color: var(--error-color) !important;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2) !important;
+}
+
+
+/* Custom Radio & Checkbox */
+.radio-group, .checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  padding-top: 4px;
+}
+
+.radio-option, .checkbox-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.radio-option label, .checkbox-option label {
+  font-weight: 500;
+  font-size: 15px;
+  margin-bottom: 0;
+  cursor: pointer;
+  padding-left: 28px;
+  color: var(--text-color);
+}
+
+.payment-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gpay-logo {
+  height: 20px;
+}
+
+input[type="radio"], input[type="checkbox"] {
+  opacity: 0;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+}
+
+input[type="radio"] + label::before,
+input[type="checkbox"] + label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border-color);
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+input[type="radio"] + label::before {
+  border-radius: 50%;
+}
+
+input[type="checkbox"] + label::before {
+  border-radius: 4px;
+}
+
+input[type="radio"]:checked + label::before {
+  background-color: var(--primary-color);
+  border-color: var(--primary-darker);
+  box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.9);
+}
+
+input[type="checkbox"]:checked + label::before {
+  background-color: var(--primary-color);
+  border-color: var(--primary-darker);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e");
+  background-size: 60%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+input[type="checkbox"]:disabled + label {
+  color: #a0aec0;
+  cursor: not-allowed;
+}
+input[type="checkbox"]:disabled + label .terms-link {
+  pointer-events: all;
+}
+
+input[type="checkbox"]:disabled + label::before {
+  background-color: #edf2f7;
+}
+
+.terms-link {
+  color: var(--label-color);
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+.terms-link:hover {
+  text-decoration: underline;
+}
+
+/* DOB and Age Display */
+.dob-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+#dob {
+  flex-grow: 1;
+}
+#age-display {
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: 15px;
+  background-color: var(--input-bg);
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  white-space: nowrap;
+  min-width: 80px;
+  text-align: center;
+}
+
+/* File Upload Area */
+.file-upload-area {
+  border: 2px dashed var(--border-color);
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  transition: border-color 0.2s;
+  position: relative;
+  background-color: var(--input-bg);
+}
+.file-upload-area:hover {
+  border-color: var(--primary-color);
+}
+.file-input {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.file-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #718096;
+}
+.file-label svg {
+  width: 28px;
+  height: 28px;
+  color: var(--label-color);
+}
+.file-label span {
+  font-weight: 600;
+  color: var(--label-color);
+}
+
+/* Coupon section */
+.coupon-input-group {
+  display: flex;
+  gap: 10px;
+}
+#coupon-code {
+  flex-grow: 1;
+}
+#apply-coupon-btn {
+  padding: 12px 20px;
+  background-color: var(--label-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+#apply-coupon-btn:hover {
+  background-color: var(--text-color);
+}
+.coupon-message {
+  font-size: 13px;
+  margin-top: 10px;
+  font-weight: 500;
+}
+.coupon-message.success {
+  color: var(--success-color);
+}
+.coupon-message.error {
+  color: var(--error-color);
+}
+
+/* Submit Button */
+button[type="submit"] {
+  width: 100%;
+  padding: 15px;
+  background-color: var(--primary-color);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  margin-top: 10px;
+}
+
+button[type="submit"]:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.modal-overlay.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+.modal-content {
+  background-color: #fff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  width: 100%;
+  max-width: 700px; /* Increased max-width for confirmation modal */
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.modal-overlay.is-visible .modal-content {
+  transform: translateY(0);
+  opacity: 1;
+}
+.modal-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  font-weight: 300;
+  color: #718096;
+  cursor: pointer;
+  line-height: 1;
+}
+.modal-content h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.modal-body {
+  flex-grow: 1;
+}
+.modal-body h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 20px;
+  margin-bottom: 8px;
+  color: var(--label-color);
+}
+.modal-body p {
+  font-size: 15px;
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+.modal-footer {
+  padding-top: 20px;
+  margin-top: 20px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+#agree-and-continue-btn {
+  padding: 12px 24px;
+  background-color: var(--primary-color);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+#agree-and-continue-btn:hover {
+  background-color: var(--primary-hover);
+}
+
+/* Confirmation Modal Specifics */
+#confirmation-data-summary {
+  margin-top: 20px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 12px 20px;
+}
+
+.summary-grid dt {
+  font-weight: 600;
+  color: var(--label-color);
+  grid-column: 1 / 2;
+}
+
+.summary-grid dd {
+  color: var(--text-color);
+  grid-column: 2 / 3;
+  word-break: break-word;
+}
+
+.confirmation-footer {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 20px;
+}
+
+.confirmation-footer .checkbox-option {
+  justify-content: center;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+#register-btn, .button-secondary {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s, opacity 0.2s;
+}
+#register-btn {
+  background-color: var(--primary-color);
+  color: #ffffff;
+}
+#register-btn:hover {
+  background-color: var(--primary-hover);
+}
+#register-btn:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.button-secondary {
+  background-color: #e5e7eb;
+  color: var(--label-color);
+}
+.button-secondary:hover {
+  background-color: #d1d5db;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .page-container {
+    flex-direction: column;
+    min-height: 0;
+    margin: 5vh 20px;
+    height: auto;
+  }
+  .sidebar, .form-panel {
+    width: 100%;
+    height: auto;
+  }
+  .sidebar {
+    padding: 40px;
+    text-align: center;
+  }
+  .form-panel {
+    padding: 40px;
+  }
+  .sidebar-content h1 {
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 768px) {
+    .page-container {
+        margin: 0;
+        border-radius: 0;
+        min-height: 100vh;
+    }
+    .modal-content {
+      max-width: 95%;
+    }
+    .summary-grid {
+      grid-template-columns: 1fr;
+    }
+    .summary-grid dt {
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 4px;
+      margin-bottom: 4px;
+    }
+    .summary-grid dd {
+      margin-bottom: 12px;
+    }
+    .modal-actions {
+      flex-direction: column;
+      gap: 10px;
+    }
+    #register-btn, .button-secondary {
+      width: 100%;
+    }
+}
+
+
+@media (max-width: 560px) {
+  .form-panel { padding: 30px 20px; }
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  .form-row .form-col:not(:last-child) {
+    margin-bottom: 28px;
+  }
+  .dob-group {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  #age-display {
+    min-width: 0;
+  }
+  .mt-2 { margin-top: 12px; }
+  .modal-content { padding: 25px; }
+  .modal-close-btn { top: 10px; right: 15px; }
+}
+  </style>
+</head>
+<body>
+
+  <div class="page-container">
+    <aside class="sidebar">
+      <div class="sidebar-content">
+        <h1 id="form-title">DEVCOTEL</h1>
+        <p>Your journey to a better carrier starts here. Fill out the form to get access to premium courses with the best offers.</p>
+      </div>
+    </aside>
+
+    <main class="form-panel">
+      <div id="success-message" class="hidden" role="alert">
+        <h3>Application Submitted!</h3>
+        <p>Thank you for reaching out. We will be in touch soon.</p>
+      </div>
+      <form id="student-form" aria-labelledby="form-title" novalidate>
+        
+        <div class="form-group" id="contact-info-section">
+          <label for="first-name">Full Name</label>
+          <div class="form-row">
+            <div class="form-col">
+              <input type="text" id="first-name" name="firstName" placeholder="First Name" required aria-invalid="false" aria-describedby="full-name-error">
+            </div>
+            <div class="form-col">
+              <input type="text" id="last-name" name="lastName" placeholder="Last Name" required aria-invalid="false" aria-describedby="full-name-error">
+            </div>
+          </div>
+          <p class="error-message hidden" id="full-name-error"></p>
+        </div>
+
+        <div class="form-group">
+          <label for="father-name">Father's Name</label>
+          <input type="text" id="father-name" name="fatherName" required aria-invalid="false" aria-describedby="father-name-error">
+          <p class="error-message hidden" id="father-name-error"></p>
+        </div>
+  
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" placeholder="ex: myname@example.com" required aria-invalid="false" aria-describedby="email-error">
+          <p class="error-message hidden" id="email-error"></p>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Mobile Number</label>
+          <input type="tel" id="phone" name="phone" placeholder="(000) 000-0000" required aria-invalid="false" aria-describedby="phone-error">
+          <p class="error-message hidden" id="phone-error"></p>
+        </div>
+  
+        <div class="form-group">
+          <label for="street-address">Home Address</label>
+          <input type="text" id="street-address" name="streetAddress" placeholder="Street Address" required aria-invalid="false" aria-describedby="address-error">
+          <div class="form-row mt-2">
+            <div class="form-col">
+              <input type="text" id="city" name="city" placeholder="City" required aria-invalid="false" aria-describedby="address-error">
+            </div>
+            <div class="form-col">
+              <input type="text" id="zip-code" name="zipCode" placeholder="Pincode" required aria-invalid="false" aria-describedby="address-error">
+            </div>
+          </div>
+          <p class="error-message hidden" id="address-error"></p>
+        </div>
+
+        <div class="form-group">
+          <label for="dob">Date of Birth</label>
+          <div class="dob-group">
+            <input type="date" id="dob" name="dob" required aria-invalid="false" aria-describedby="dob-error">
+            <span id="age-display"></span>
+          </div>
+          <p class="error-message hidden" id="dob-error"></p>
+        </div>
+
+        <fieldset class="form-group">
+            <legend>Current Status</legend>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <input type="radio" id="status-student" name="currentStatus" value="student" required aria-describedby="status-error">
+                    <label for="status-student">Student</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="status-professional" name="currentStatus" value="professional" aria-describedby="status-error">
+                    <label for="status-professional">Professional</label>
+                </div>
+            </div>
+            <p class="error-message hidden" id="status-error"></p>
+        </fieldset>
+
+        <div class="form-group">
+            <label for="current-studies">What are you currently studying / your profession?</label>
+            <input type="text" id="current-studies" name="currentStudies" required aria-invalid="false" aria-describedby="current-studies-error">
+            <p class="error-message hidden" id="current-studies-error"></p>
+        </div>
+
+        <div class="form-group">
+            <label for="course-plan">Course which you plan to join</label>
+            <input type="text" id="course-plan" name="coursePlan" required aria-invalid="false" aria-describedby="course-plan-error">
+            <p class="error-message hidden" id="course-plan-error"></p>
+        </div>
+
+        <div class="form-group">
+            <label for="join-date">Preferred Joining Date</label>
+            <input type="date" id="join-date" name="joinDate" required aria-invalid="false" aria-describedby="join-date-error">
+            <p class="error-message hidden" id="join-date-error"></p>
+        </div>
+        
+        <div class="form-group">
+          <label for="referral-source">Where did you hear about us?</label>
+          <select id="referral-source" name="referralSource" required aria-invalid="false" aria-describedby="referral-source-error">
+            <option value="">Please Select</option>
+            <option value="social-media">Social Media</option>
+            <option value="friend">Friend/Colleague</option>
+            <option value="advertisement">Advertisement</option>
+          </select>
+          <p class="error-message hidden" id="referral-source-error"></p>
+        </div>
+  
+        <div class="form-group">
+          <label for="resume-file">Upload your Resume</label>
+          <div class="file-upload-area">
+            <input type="file" id="resume-file" name="resumeFile" class="file-input" accept=".pdf,.doc,.docx" aria-describedby="resume-file-error">
+            <label for="resume-file" class="file-label">
+               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span>Upload a File</span>
+              <small>Drag and drop files here</small>
+            </label>
+          </div>
+           <p class="error-message hidden" id="resume-file-error"></p>
+        </div>
+        
+        <fieldset class="form-group">
+          <legend>Preferred Area to Upskill in Future:</legend>
+          <div class="checkbox-group">
+            <div class="checkbox-option">
+              <input type="checkbox" id="area-ai" name="upskillArea" value="ai_technology" aria-describedby="upskill-area-error">
+              <label for="area-ai">AI/Technology</label>
+            </div>
+            <div class="checkbox-option">
+              <input type="checkbox" id="area-finance" name="upskillArea" value="finance_marketing" aria-describedby="upskill-area-error">
+              <label for="area-finance">Finance/Marketing</label>
+            </div>
+            <div class="checkbox-option">
+              <input type="checkbox" id="area-agri" name="upskillArea" value="agricultural" aria-describedby="upskill-area-error">
+              <label for="area-agri">Agricultural</label>
+            </div>
+            <div class="checkbox-option">
+              <input type="checkbox" id="area-manpower" name="upskillArea" value="manpower" aria-describedby="upskill-area-error">
+              <label for="area-manpower">Manpower</label>
+            </div>
+            <div class="checkbox-option">
+              <input type="checkbox" id="area-advanced" name="upskillArea" value="advanced" aria-describedby="upskill-area-error">
+              <label for="area-advanced">Advanced Tech</label>
+            </div>
+          </div>
+          <p class="error-message hidden" id="upskill-area-error"></p>
+        </fieldset>
+  
+        <div class="form-group">
+          <label for="special-request">Any special request? (e.g., specific field to concentrate on)</label>
+          <textarea id="special-request" name="specialRequest" rows="5"></textarea>
+        </div>
+
+        <fieldset class="form-group">
+          <legend>Do you want more offers on the course fee?</legend>
+          <div class="radio-group">
+            <div class="radio-option">
+              <input type="radio" id="offers-yes" name="wantsOffers" value="yes" required aria-describedby="wants-offers-error">
+              <label for="offers-yes">Yes</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="offers-no" name="wantsOffers" value="no" checked aria-describedby="wants-offers-error">
+              <label for="offers-no">No</label>
+            </div>
+          </div>
+          <p class="error-message hidden" id="wants-offers-error"></p>
+        </fieldset>
+  
+        <fieldset class="form-group">
+          <legend>Registration Fee Payment</legend>
+          <div class="radio-group">
+            <div class="radio-option">
+              <input type="radio" id="payment-gpay" name="paymentMethod" value="gpay" required checked>
+              <label for="payment-gpay" class="payment-label">
+                <span>Google Pay</span>
+                <img class="gpay-logo" src="https://miro.medium.com/v2/resize:fit:1400/1*NNI7aPLtSaLo6jb4KGEFDA.jpeg" alt="Google Pay Logo">
+              </label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="payment-coupon" name="paymentMethod" value="coupon">
+              <label for="payment-coupon">Use Coupon Code</label>
+            </div>
+          </div>
+        </fieldset>
+        
+        <div id="coupon-code-container" class="form-group hidden">
+          <label for="coupon-code">Coupon Code</label>
+          <div class="coupon-input-group">
+            <input type="text" id="coupon-code" name="couponCode" placeholder="Enter your code" aria-invalid="false" aria-describedby="coupon-code-error">
+            <button type="button" id="apply-coupon-btn">Apply</button>
+          </div>
+          <p id="coupon-success-msg" class="hidden coupon-message success">Discount applied successfully!</p>
+          <p id="coupon-error-msg" class="hidden coupon-message error">Invalid coupon code. Please try again.</p>
+           <p class="error-message hidden" id="coupon-code-error"></p>
+        </div>
+  
+        <div class="form-group">
+          <div class="checkbox-option">
+            <input type="checkbox" id="terms" name="terms" value="agreed" required disabled aria-invalid="false" aria-describedby="terms-error">
+            <label for="terms">I agree to the <span id="open-terms-modal" class="terms-link">Terms and Conditions</span></label>
+          </div>
+           <p class="error-message hidden" id="terms-error"></p>
+        </div>
+        
+        <div id="submit-error-message" class="error-message hidden" role="alert"></div>
+        <button type="submit">Submit Application</button>
+      </form>
+    </main>
+  </div>
+
+  <!-- Terms and Conditions Modal -->
+  <div id="terms-modal" class="modal-overlay">
+    <div class="modal-content">
+      <button id="close-terms-modal" class="modal-close-btn" aria-label="Close Terms and Conditions modal">&times;</button>
+      <h2>Terms and Conditions</h2>
+      <div class="modal-body">
+        <p>By completing and submitting this application form, you ("the User") agree to be legally bound by the following Terms and Conditions set forth by devcotel ("the Company").</p>
+        
+        <h4>1. Service Description</h4>
+        <p>The Company provides a service to facilitate connections between prospective students and third-party educational platforms ("Course Providers"). Our service includes collecting user information to identify suitable courses and sharing this information with the relevant Course Providers to initiate the enrollment process.</p>
+        
+        <h4>2. Data Privacy and Sharing Consent</h4>
+        <p>The User expressly consents to the collection, storage, and processing of personal data provided in this form. The Company is authorized to share this data with Course Providers whose offerings align with the User's expressed interests. We are committed to protecting your privacy and will not sell or lease your data to any unrelated third parties.</p>
+        
+        <h4>3. User Obligations and Accuracy of Information</h4>
+        <p>The User warrants that all information provided is accurate, complete, and current. Providing false or misleading information may result in the termination of our services and may impact your eligibility for courses offered by our partners.</p>
+        
+        <h4>4. Third-Party Interactions</h4>
+        <p>The Company is not a party to any agreement or transaction between the User and a Course Provider. We do not endorse, guarantee, or assume responsibility for the quality, content, or outcomes of any courses. All matters concerning course fees, schedules, and curriculum are to be resolved directly with the Course Provider.</p>
+        
+        <h4>5. Intellectual Property</h4>
+        <p>All content on the devcotel platform, including logos, text, graphics, and software, is the property of the Company and is protected by applicable intellectual property laws. Unauthorized use or reproduction is strictly prohibited.</p>
+        
+        <h4>6. Limitation of Liability</h4>
+        <p>To the fullest extent permitted by law, the Company shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, resulting from your access to or use of our services or your engagement with any Course Provider.</p>
+
+        <h4>7. Indemnification</h4>
+        <p>The User agrees to indemnify and hold harmless the Company, its officers, directors, and employees from any claim or demand, including reasonable attorneys' fees, made by any third party due to or arising out of the User's breach of these Terms and Conditions or violation of any law or the rights of a third-party.</p>
+
+        <h4>8. Modification of Terms</h4>
+        <p>The Company reserves the right, at its sole discretion, to modify or replace these Terms and Conditions at any time. It is the User's responsibility to review this agreement periodically for changes.</p>
+
+        <h4>9. Governing Law</h4>
+        <p>These Terms and Conditions shall be governed and construed in accordance with the laws of the jurisdiction in which the Company is registered, without regard to its conflict of law provisions.</p>
+      </div>
+      <div class="modal-footer">
+        <button id="agree-and-continue-btn">I Agree and Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div id="confirmation-modal" class="modal-overlay">
+    <div class="modal-content">
+      <button id="close-confirmation-modal" class="modal-close-btn" aria-label="Close confirmation modal">&times;</button>
+      <h2>Confirm Your Details</h2>
+      <div class="modal-body">
+        <p>Please review the information you have provided. Ensure all details are correct before registering.</p>
+        <div id="confirmation-data-summary">
+          <!-- Data will be populated by JavaScript -->
+        </div>
+      </div>
+      <div class="modal-footer confirmation-footer">
+        <div class="checkbox-option">
+          <input type="checkbox" id="data-confirmation-checkbox" name="data-confirmation">
+          <label for="data-confirmation-checkbox">I confirm that the information I have provided is accurate.</label>
+        </div>
+        <div class="modal-actions">
+          <button id="edit-data-btn" class="button-secondary">Go Back & Edit</button>
+          <button id="register-btn" disabled>Register</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<script>
+  // Declare Supabase to satisfy TypeScript since it's loaded from CDN
+declare var supabase: any;
+
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('student-form') as HTMLFormElement;
+  const successMessage = document.getElementById('success-message');
+  
+  // Input elements for easy access
+  const firstNameInput = document.getElementById('first-name') as HTMLInputElement;
+  const lastNameInput = document.getElementById('last-name') as HTMLInputElement;
+  const fatherNameInput = document.getElementById('father-name') as HTMLInputElement;
+  const emailInput = document.getElementById('email') as HTMLInputElement;
+  const phoneInput = document.getElementById('phone') as HTMLInputElement;
+  const streetAddressInput = document.getElementById('street-address') as HTMLInputElement;
+  const cityInput = document.getElementById('city') as HTMLInputElement;
+  const zipCodeInput = document.getElementById('zip-code') as HTMLInputElement;
+  const dobInput = document.getElementById('dob') as HTMLInputElement;
+  const ageDisplay = document.getElementById('age-display');
+  const currentStudiesInput = document.getElementById('current-studies') as HTMLInputElement;
+  const coursePlanInput = document.getElementById('course-plan') as HTMLInputElement;
+  const joinDateInput = document.getElementById('join-date') as HTMLInputElement;
+  const referralSourceSelect = document.getElementById('referral-source') as HTMLSelectElement;
+  const resumeFileInput = document.getElementById('resume-file') as HTMLInputElement;
+  const specialRequestTextarea = document.getElementById('special-request') as HTMLTextAreaElement;
+  
+  // Payment Method elements
+  const paymentMethodRadios = document.querySelectorAll<HTMLInputElement>('input[name="paymentMethod"]');
+  const couponCodeContainer = document.getElementById('coupon-code-container');
+  const couponCodeInput = document.getElementById('coupon-code') as HTMLInputElement;
+  const applyCouponBtn = document.getElementById('apply-coupon-btn') as HTMLButtonElement;
+  const couponSuccessMsg = document.getElementById('coupon-success-msg');
+  const couponErrorMsg = document.getElementById('coupon-error-msg');
+  
+  // File Upload elements
+  const fileUploadLabelSpan = document.querySelector('.file-label span');
+
+  // Terms Modal elements
+  const termsModal = document.getElementById('terms-modal');
+  const openTermsBtn = document.getElementById('open-terms-modal');
+  const closeTermsBtn = document.getElementById('close-terms-modal');
+  const agreeAndContinueBtn = document.getElementById('agree-and-continue-btn') as HTMLButtonElement;
+  const termsCheckbox = document.getElementById('terms') as HTMLInputElement;
+
+  // Confirmation Modal elements
+  const confirmationModal = document.getElementById('confirmation-modal');
+  const closeConfirmationBtn = document.getElementById('close-confirmation-modal');
+  const confirmationDataSummary = document.getElementById('confirmation-data-summary');
+  const dataConfirmationCheckbox = document.getElementById('data-confirmation-checkbox') as HTMLInputElement;
+  const editDataBtn = document.getElementById('edit-data-btn') as HTMLButtonElement;
+  const registerBtn = document.getElementById('register-btn') as HTMLButtonElement;
+
+
+  // Submission elements
+  const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+  const submitErrorMessage = document.getElementById('submit-error-message');
+
+
+  const VALID_COUPONS = ['DEVTEL10', 'COURSE20', 'FREEPASS'];
+  let isCouponApplied = false;
+
+  // --- Supabase Initialization ---
+  const { createClient } = supabase;
+  const supabaseUrl = 'https://xvpmmyqihecilgneiljv.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2cG1teXFpaGVjaWxnbmVpbGp2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI0MTE4OTIsImV4cCI6MjA3Nzk4Nzg5Mn0.V4WsMnFXm6XHPJWq80WvO2eaL3hknFFmiVu_t8UMv4E';
+  const supabaseClient = createClient(supabaseUrl, supabaseKey);
+
+
+  // --- Validation Helper Functions ---
+  const getValidationElements = (input: HTMLElement): { container: HTMLElement | null, errorEl: HTMLElement | null } => {
+    const container = input.closest('.form-group, .fieldset');
+    if (!container) return { container: null, errorEl: null };
+    const errorEl = container.querySelector('.error-message');
+    // FIX: Cast `container` to `HTMLElement` to match the function's return type.
+    return { container: container as HTMLElement, errorEl: errorEl as HTMLElement };
+  };
+  
+  const showError = (input: HTMLElement, message: string) => {
+    const { container, errorEl } = getValidationElements(input);
+    if (!container || !errorEl) return;
+
+    errorEl.textContent = message;
+    errorEl.classList.remove('hidden');
+
+    container.querySelectorAll('input, select, textarea').forEach(el => {
+        const field = el as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+        if(field.type !== 'radio' && field.type !== 'checkbox') {
+            field.setAttribute('aria-invalid', 'true');
+        }
+        field.classList.add('input-error');
+    });
+  };
+
+  const clearError = (input: HTMLElement) => {
+    const { container, errorEl } = getValidationElements(input);
+    if (!container || !errorEl) return;
+
+    errorEl.textContent = '';
+    errorEl.classList.add('hidden');
+
+    container.querySelectorAll('input, select, textarea').forEach(el => {
+        const field = el as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+        if(field.type !== 'radio' && field.type !== 'checkbox') {
+            field.setAttribute('aria-invalid', 'false');
+        }
+        field.classList.remove('input-error');
+    });
+  };
+
+
+  // --- Main Validation Logic ---
+  
+  const validateForm = (): boolean => {
+    let isValid = true;
+
+    // 1. Full Name
+    if (firstNameInput.value.trim() === '' || lastNameInput.value.trim() === '') {
+      isValid = false;
+      showError(firstNameInput, 'Full name is required.');
+    } else {
+      clearError(firstNameInput);
+    }
+    
+    // 2. Father's Name
+    if (fatherNameInput.value.trim() === '') { isValid = false; showError(fatherNameInput, 'Father\'s name is required.'); } else { clearError(fatherNameInput); }
+
+    // 3. Email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (emailInput.value.trim() === '') { isValid = false; showError(emailInput, 'Email is required.'); }
+    else if (!emailRegex.test(emailInput.value)) { isValid = false; showError(emailInput, 'Please enter a valid email address.'); }
+    else { clearError(emailInput); }
+
+    // 4. Phone
+    if (phoneInput.value.trim() === '') { isValid = false; showError(phoneInput, 'Mobile number is required.'); } else { clearError(phoneInput); }
+    
+    // 5. Address
+    if (streetAddressInput.value.trim() === '' || cityInput.value.trim() === '' || zipCodeInput.value.trim() === '') {
+      isValid = false;
+      showError(streetAddressInput, 'Complete address is required.');
+    } else {
+      clearError(streetAddressInput);
+    }
+
+    // 6. Date of Birth & Age
+    if (dobInput.value === '') { isValid = false; showError(dobInput, 'Date of birth is required.'); }
+    else {
+      const age = calculateAge(dobInput.value);
+      if (age < 15) { isValid = false; showError(dobInput, 'You must be at least 15 years old.'); }
+      else { clearError(dobInput); }
+    }
+    
+    // 7. Current Status
+    const statusChecked = document.querySelector('input[name="currentStatus"]:checked');
+    if (!statusChecked) { 
+        isValid = false; 
+        const firstStatusRadio = document.getElementById('status-student') as HTMLInputElement;
+        showError(firstStatusRadio, 'Please select your current status.');
+    } else { 
+        const firstStatusRadio = document.getElementById('status-student') as HTMLInputElement;
+        clearError(firstStatusRadio);
+    }
+
+    // 8. Current Studies/Profession
+    if (currentStudiesInput.value.trim() === '') { isValid = false; showError(currentStudiesInput, 'This field is required.'); } else { clearError(currentStudiesInput); }
+    
+    // 9. Course Plan
+    if (coursePlanInput.value.trim() === '') { isValid = false; showError(coursePlanInput, 'Please specify the course you plan to join.'); } else { clearError(coursePlanInput); }
+
+    // 10. Joining Date
+    if (joinDateInput.value === '') { isValid = false; showError(joinDateInput, 'Please select a joining date.'); }
+    else if (new Date(joinDateInput.value) <= new Date()) { isValid = false; showError(joinDateInput, 'Joining date must be in the future.'); }
+    else { clearError(joinDateInput); }
+    
+    // 11. Referral Source
+    if (referralSourceSelect.value === '') { isValid = false; showError(referralSourceSelect, 'Please select a source.'); } else { clearError(referralSourceSelect); }
+
+    // 12. Upskill Area
+    const upskillAreaChecked = document.querySelector('input[name="upskillArea"]:checked');
+    if (!upskillAreaChecked) { 
+        isValid = false; 
+        const firstUpskillCheckbox = document.getElementById('area-ai') as HTMLInputElement;
+        showError(firstUpskillCheckbox, 'Please select at least one area to upskill.');
+    } else { 
+        const firstUpskillCheckbox = document.getElementById('area-ai') as HTMLInputElement;
+        clearError(firstUpskillCheckbox);
+    }
+
+    // 13. Wants Offers
+    const wantsOffersChecked = document.querySelector('input[name="wantsOffers"]:checked');
+    if (!wantsOffersChecked) {
+        isValid = false;
+        const firstOffersRadio = document.getElementById('offers-yes') as HTMLInputElement;
+        showError(firstOffersRadio, 'Please select an option for offers.');
+    } else {
+        const firstOffersRadio = document.getElementById('offers-yes') as HTMLInputElement;
+        clearError(firstOffersRadio);
+    }
+
+    // 14. Coupon Code
+    const paymentMethodValue = (document.querySelector('input[name="paymentMethod"]:checked') as HTMLInputElement)?.value;
+    if (paymentMethodValue === 'coupon' && !isCouponApplied) {
+      isValid = false;
+      showError(couponCodeInput, 'Please apply a valid coupon code.');
+    } else {
+      clearError(couponCodeInput);
+    }
+
+    // 15. Terms and Conditions
+    if (!termsCheckbox.checked) { isValid = false; showError(termsCheckbox, 'You must agree to the terms and conditions.'); }
+    else { clearError(termsCheckbox); }
+
+    return isValid;
+  };
+
+  const toggleCouponField = (show: boolean) => {
+    isCouponApplied = false;
+    if (show) {
+      couponCodeContainer.classList.remove('hidden');
+      couponCodeInput.required = true;
+    } else {
+      couponCodeContainer.classList.add('hidden');
+      couponCodeInput.required = false;
+      couponCodeInput.value = '';
+      couponSuccessMsg.classList.add('hidden');
+      couponErrorMsg.classList.add('hidden');
+      clearError(couponCodeInput);
+    }
+  };
+  
+  const resetForm = () => {
+    form.reset();
+    form.classList.remove('hidden');
+    successMessage.classList.add('hidden');
+    
+    // Clear all validation errors
+    form.querySelectorAll('input, select, textarea').forEach(el => clearError(el as HTMLElement));
+    
+    toggleCouponField(false);
+    (document.getElementById('payment-gpay') as HTMLInputElement).checked = true;
+    
+    if (fileUploadLabelSpan) {
+        fileUploadLabelSpan.textContent = 'Upload a File';
+    }
+    if (ageDisplay) {
+      ageDisplay.textContent = '';
+    }
+
+    termsCheckbox.checked = false;
+    termsCheckbox.disabled = true;
+
+    // Also reset confirmation modal state
+    dataConfirmationCheckbox.checked = false;
+    registerBtn.disabled = true;
+
+  };
+  
+  const calculateAge = (dobString: string): number => {
+    const birthDate = new Date(dobString);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  };
+
+  const calculateAndShowAge = () => {
+    if (!dobInput.value) {
+      ageDisplay.textContent = '';
+      return;
+    }
+    const age = calculateAge(dobInput.value);
+    if (age >= 0) {
+        ageDisplay.textContent = `Age: ${age}`;
+    } else {
+        ageDisplay.textContent = '';
+    }
+    validateForm(); // Re-validate on change for real-time feedback
+  };
+  
+  // Generic Modal open/close
+  const openModal = (modal: HTMLElement) => {
+    modal.classList.add('is-visible');
+    document.body.classList.add('modal-open');
+  };
+
+  const closeModal = (modal: HTMLElement) => {
+    modal.classList.remove('is-visible');
+    document.body.classList.remove('modal-open');
+  };
+
+
+  const populateAndShowConfirmationModal = () => {
+    const formData = new FormData(form);
+    const data = {
+      "Full Name": `${formData.get('firstName')} ${formData.get('lastName')}`,
+      "Father's Name": formData.get('fatherName'),
+      "Email": formData.get('email'),
+      "Mobile Number": formData.get('phone'),
+      "Address": `${formData.get('streetAddress')}, ${formData.get('city')}, ${formData.get('zipCode')}`,
+      "Date of Birth": formData.get('dob'),
+      "Current Status": formData.get('currentStatus'),
+      "Current Studies/Profession": formData.get('currentStudies'),
+      "Planned Course": formData.get('coursePlan'),
+      "Joining Date": formData.get('joinDate'),
+      "Referral Source": formData.get('referralSource'),
+      "Resume": (formData.get('resumeFile') as File)?.name || 'Not provided',
+      "Upskill Areas": formData.getAll('upskillArea').join(', '),
+      "Wants Offers": formData.get('wantsOffers'),
+      "Payment Method": formData.get('paymentMethod'),
+      "Special Request": formData.get('specialRequest') || 'None'
+    };
+
+    if(data["Payment Method"] === 'coupon') {
+        data["Coupon Code"] = formData.get('couponCode');
+    }
+
+    let summaryHtml = '<dl class="summary-grid">';
+    for(const [key, value] of Object.entries(data)) {
+        if(value) {
+            summaryHtml += `<dt>${key}</dt><dd>${value}</dd>`;
+        }
+    }
+    summaryHtml += '</dl>';
+
+    confirmationDataSummary.innerHTML = summaryHtml;
+    openModal(confirmationModal);
+  };
+
+
+  // --- Event Listeners ---
+  
+  // Real-time validation listeners
+  form.querySelectorAll('input, select, textarea').forEach(input => {
+    input.addEventListener('blur', () => validateForm());
+    input.addEventListener('change', () => validateForm());
+  });
+
+  dobInput.addEventListener('change', calculateAndShowAge);
+
+  paymentMethodRadios.forEach(radio => {
+    radio.addEventListener('change', (event) => {
+      const target = event.target as HTMLInputElement;
+      toggleCouponField(target.value === 'coupon');
+    });
+  });
+
+  applyCouponBtn.addEventListener('click', () => {
+    const code = couponCodeInput.value.trim().toUpperCase();
+    
+    couponSuccessMsg.classList.add('hidden');
+    couponErrorMsg.classList.add('hidden');
+    isCouponApplied = false;
+    clearError(couponCodeInput);
+
+    if (VALID_COUPONS.includes(code)) {
+      couponSuccessMsg.classList.remove('hidden');
+      isCouponApplied = true;
+    } else {
+      couponErrorMsg.classList.remove('hidden');
+    }
+  });
+
+  couponCodeInput.addEventListener('input', () => {
+    if (isCouponApplied) {
+      isCouponApplied = false;
+      couponSuccessMsg.classList.add('hidden');
+    }
+    if (!couponErrorMsg.classList.contains('hidden')) {
+      couponErrorMsg.classList.add('hidden');
+    }
+    clearError(couponCodeInput);
+  });
+
+  resumeFileInput.addEventListener('change', () => {
+    if (resumeFileInput.files && resumeFileInput.files.length > 0) {
+      fileUploadLabelSpan.textContent = resumeFileInput.files[0].name;
+    } else {
+      fileUploadLabelSpan.textContent = 'Upload a File';
+    }
+  });
+
+  // Terms Modal Listeners
+  openTermsBtn.addEventListener('click', () => openModal(termsModal));
+  closeTermsBtn.addEventListener('click', () => closeModal(termsModal));
+  agreeAndContinueBtn.addEventListener('click', () => {
+    termsCheckbox.checked = true;
+    termsCheckbox.disabled = false;
+    closeModal(termsModal);
+    validateForm(); // Re-validate after checking
+    const contactSection = document.getElementById('contact-info-section');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+  termsModal.addEventListener('click', (event) => {
+    if (event.target === termsModal) closeModal(termsModal);
+  });
+
+  // Confirmation Modal Listeners
+  closeConfirmationBtn.addEventListener('click', () => closeModal(confirmationModal));
+  editDataBtn.addEventListener('click', () => closeModal(confirmationModal));
+  confirmationModal.addEventListener('click', (event) => {
+    if (event.target === confirmationModal) closeModal(confirmationModal);
+  });
+  dataConfirmationCheckbox.addEventListener('change', () => {
+    registerBtn.disabled = !dataConfirmationCheckbox.checked;
+  });
+
+
+  const handleFinalSubmission = async () => {
+    if (submitErrorMessage) {
+        submitErrorMessage.classList.add('hidden');
+        submitErrorMessage.textContent = '';
+    }
+    const originalBtnText = registerBtn.textContent;
+    registerBtn.disabled = true;
+    registerBtn.textContent = 'Registering...';
+
+    try {
+      const formData = new FormData(form);
+      let resumeUrl: string | null = null;
+      
+      // 1. Handle File Upload to Supabase Storage
+      const resumeFile = formData.get('resumeFile') as File;
+      if (resumeFile && resumeFile.size > 0) {
+        const fileExt = resumeFile.name.split('.').pop();
+        const fileName = `${Date.now()}.${fileExt}`;
+        const filePath = `public/${fileName}`;
+
+        const { data: uploadData, error: uploadError } = await supabaseClient.storage
+          .from('resumes') // IMPORTANT: Create a bucket named 'resumes' in your Supabase project.
+          .upload(filePath, resumeFile);
+
+        if (uploadError) {
+          throw new Error(`Resume Upload Failed: ${uploadError.message}`);
+        }
+        
+        const { data: urlData } = supabaseClient.storage
+          .from('resumes')
+          .getPublicUrl(filePath);
+          
+        resumeUrl = urlData.publicUrl;
+      }
+
+      // 2. Prepare data object for database insertion
+      const applicationData = {
+        first_name: formData.get('firstName'),
+        last_name: formData.get('lastName'),
+        father_name: formData.get('fatherName'),
+        email: formData.get('email'),
+        phone: formData.get('phone'),
+        date_of_birth: formData.get('dob'),
+        street_address: formData.get('streetAddress'),
+        city: formData.get('city'),
+        pincode: formData.get('zipCode'),
+        current_status: formData.get('currentStatus'),
+        current_studies_or_profession: formData.get('currentStudies'),
+        planned_course: formData.get('coursePlan'),
+        preferred_joining_date: formData.get('joinDate'),
+        resume_url: resumeUrl,
+        upskill_areas: formData.getAll('upskillArea'),
+        special_request: formData.get('specialRequest'),
+        wants_offers: formData.get('wantsOffers') === 'yes',
+        referral_source: formData.get('referralSource'),
+        payment_method: formData.get('paymentMethod'),
+        coupon_code: formData.get('paymentMethod') === 'coupon' ? formData.get('couponCode') : null,
+        agreed_to_terms: formData.get('terms') === 'agreed'
+      };
+
+      // 3. Insert data into the Supabase database
+      const { error: insertError } = await supabaseClient
+        .from('student_applications')
+        .insert([applicationData]);
+
+      if (insertError) {
+        // Re-throw the original Supabase error to catch specific codes
+        throw insertError;
+      }
+
+      // 4. Show success message
+      closeModal(confirmationModal);
+      form.classList.add('hidden');
+      successMessage.classList.remove('hidden');
+      setTimeout(resetForm, 3000);
+
+    } catch (error: any) {
+      console.error('Submission Error:', error);
+      
+      // Check for specific duplicate email error from Supabase (Postgres code '23505')
+      if (error && error.code === '23505' && error.message.includes('student_applications_email_key')) {
+        closeModal(confirmationModal);
+        showError(emailInput, 'An application with this email address already exists. Please use a different email.');
+        emailInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        // Fallback for all other errors
+        if (submitErrorMessage) {
+          submitErrorMessage.textContent = `Registration failed. ${error.message}. Please try again.`;
+          submitErrorMessage.classList.remove('hidden');
+          closeModal(confirmationModal);
+        }
+      }
+    } finally {
+      // 5. Reset button state
+      registerBtn.disabled = false;
+      registerBtn.textContent = originalBtnText;
+    }
+  }
+
+  registerBtn.addEventListener('click', handleFinalSubmission);
+  
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (validateForm()) {
+      populateAndShowConfirmationModal();
+    }
+  });
+
+  // Initial setup on page load
+  const checkedPaymentRadio = document.querySelector<HTMLInputElement>('input[name="paymentMethod"]:checked');
+  toggleCouponField(checkedPaymentRadio?.value === 'coupon');
+});
+</script>
+</body>
+</html>
